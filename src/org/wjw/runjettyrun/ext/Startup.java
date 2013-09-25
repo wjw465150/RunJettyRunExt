@@ -50,7 +50,7 @@ public class Startup implements IStartup {
 				}
 
 				//设置缺省的java源代码编辑器:org.eclipse.jdt.ui.CompilationUnitEditor
-				PlatformUI.getWorkbench().getEditorRegistry().setDefaultEditor("*.java", ":org.eclipse.jdt.ui.CompilationUnitEditor");
+				PlatformUI.getWorkbench().getEditorRegistry().setDefaultEditor("*.java", "org.eclipse.jdt.ui.CompilationUnitEditor");
 
 				String JSP_API = "JSP_API";
 				String[] userLibraryNames = JavaCore.getUserLibraryNames();
