@@ -1,5 +1,6 @@
 package org.wjw.runjettyrun.ext;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -64,6 +65,19 @@ public class Startup implements IStartup {
 					} catch (Exception e) {
 						Activator.logError(e);
 					}
+				} else { //检查lib路径是否正确
+					String[] libNames = new String[] { "lib/jsp-2.1.jar", "lib/jsp-api-2.1.jar", "lib/servlet-api-2.5-20081211.jar" };
+					if (validBundleLibs(bundle, libNames)) {
+						return;
+					}
+
+					try {
+						IClasspathEntry[] ics = getBundleLibs(bundle, libNames);
+						UserLibraryManager user = new UserLibraryManager();
+						user.setUserLibrary(JSP_API, ics, false);
+					} catch (Exception e) {
+						Activator.logError(e);
+					}
 				}
 			}
 		});
@@ -97,4 +111,26 @@ public class Startup implements IStartup {
 		return entries.toArray(new IClasspathEntry[0]);
 	}
 
+	public static boolean validBundleLibs(Bundle bundle, String[] filelist) {
+		URL installUrl = bundle.getEntry("/");
+		try {
+			for (String filepath : filelist) {
+				// Note the FileLocator will generate a file for us when we use
+				// FileLocator.toFileURL ,
+				// it's very important.
+				try {
+					URL fileUrl = FileLocator.toFileURL(new URL(installUrl, filepath));
+					File ff = new Path(fileUrl.getPath()).toFile();
+					if (ff.exists()) {
+						return false;
+					}
+				} catch (Exception e) {
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			Activator.logError(e);
+		}
+		return false;
+	}
 }
