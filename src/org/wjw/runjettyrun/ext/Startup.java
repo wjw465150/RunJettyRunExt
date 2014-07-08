@@ -53,32 +53,60 @@ public class Startup implements IStartup {
 				//设置缺省的java源代码编辑器:org.eclipse.jdt.ui.CompilationUnitEditor
 				PlatformUI.getWorkbench().getEditorRegistry().setDefaultEditor("*.java", "org.eclipse.jdt.ui.CompilationUnitEditor");
 
-				String JSP_API = "JSP_API";
-				String[] userLibraryNames = JavaCore.getUserLibraryNames();
-				Bundle bundle = Platform.getBundle("runjettyrun");
-				if (Arrays.asList(userLibraryNames).contains(JSP_API) == false) {
-					String[] libNames = new String[] { "lib/jsp-2.1.jar", "lib/jsp-api-2.1.jar", "lib/servlet-api-2.5-20081211.jar" };
-					try {
-						IClasspathEntry[] ics = getBundleLibs(bundle, libNames);
-						UserLibraryManager user = new UserLibraryManager();
-						user.setUserLibrary(JSP_API, ics, false);
-					} catch (Exception e) {
-						Activator.logError(e);
+				{
+					String JSP_API = "JSP_API_2.5";
+					String[] userLibraryNames = JavaCore.getUserLibraryNames();
+					Bundle bundle = Platform.getBundle("runjettyrun");
+					if (Arrays.asList(userLibraryNames).contains(JSP_API) == false) {
+						String[] libNames = new String[] { "lib/jsp-2.1.jar", "lib/jsp-api-2.1.jar", "lib/servlet-api-2.5-20081211.jar" };
+						try {
+							IClasspathEntry[] ics = getBundleLibs(bundle, libNames);
+							UserLibraryManager user = new UserLibraryManager();
+							user.setUserLibrary(JSP_API, ics, false);
+						} catch (Exception e) {
+							Activator.logError(e);
+						}
+					} else { //检查lib路径是否正确
+						String[] libNames = new String[] { "lib/jsp-2.1.jar", "lib/jsp-api-2.1.jar", "lib/servlet-api-2.5-20081211.jar" };
+						if (validBundleLibs(bundle, libNames) == false) {
+							try {
+								IClasspathEntry[] ics = getBundleLibs(bundle, libNames);
+								UserLibraryManager user = new UserLibraryManager();
+								user.setUserLibrary(JSP_API, ics, false);
+							} catch (Exception e) {
+								Activator.logError(e);
+							}
+						}
 					}
-				} else { //检查lib路径是否正确
-					String[] libNames = new String[] { "lib/jsp-2.1.jar", "lib/jsp-api-2.1.jar", "lib/servlet-api-2.5-20081211.jar" };
-					if (validBundleLibs(bundle, libNames)) {
-						return;
-					}
+				} //JSP_API_2.5
 
-					try {
-						IClasspathEntry[] ics = getBundleLibs(bundle, libNames);
-						UserLibraryManager user = new UserLibraryManager();
-						user.setUserLibrary(JSP_API, ics, false);
-					} catch (Exception e) {
-						Activator.logError(e);
+				{
+					String JSP_API = "JSP_API_3.0";
+					String[] userLibraryNames = JavaCore.getUserLibraryNames();
+					Bundle bundle = Platform.getBundle("runjettyrun.jetty8");
+					if (Arrays.asList(userLibraryNames).contains(JSP_API) == false) {
+						String[] libNames = new String[] { "lib/javax.annotation_1.1.0.v201105051105.jar", "lib/javax.el-2.2.0.v201108011116.jar", "lib/javax.servlet.jsp.jstl-1.2.0.v201105211821.jar", "lib/javax.servlet.jsp-2.2.0.v201112011158.jar", "lib/servlet-api-3.0.jar" };
+						try {
+							IClasspathEntry[] ics = getBundleLibs(bundle, libNames);
+							UserLibraryManager user = new UserLibraryManager();
+							user.setUserLibrary(JSP_API, ics, false);
+						} catch (Exception e) {
+							Activator.logError(e);
+						}
+					} else { //检查lib路径是否正确
+						String[] libNames = new String[] { "lib/javax.annotation_1.1.0.v201105051105.jar", "lib/javax.el-2.2.0.v201108011116.jar", "lib/javax.servlet.jsp.jstl-1.2.0.v201105211821.jar", "lib/javax.servlet.jsp-2.2.0.v201112011158.jar", "lib/servlet-api-3.0.jar" };
+						if (validBundleLibs(bundle, libNames) == false) {
+							try {
+								IClasspathEntry[] ics = getBundleLibs(bundle, libNames);
+								UserLibraryManager user = new UserLibraryManager();
+								user.setUserLibrary(JSP_API, ics, false);
+							} catch (Exception e) {
+								Activator.logError(e);
+							}
+						}
 					}
-				}
+				} //JSP_API_3.0
+
 			}
 		});
 
